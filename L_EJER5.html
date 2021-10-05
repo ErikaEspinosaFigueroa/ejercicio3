@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="paises.js"></script>
+        <script type="text/javascript" src="ciudades.js"></script>
+        <script src=" https://unpkg.com/leaflet@1.6.0/dist/leaflet.js "></script>
+        <link rel="stylesheet" href=" https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+        <style>
+            #map {
+            width: 100%;
+            height: 580px;
+            box-shadow: 5px 5px 5px #888;
+        }
+        </style>
+    </head>
+    <body>
+        <div id= 'map'>
+        </div>
+        <script>
+            function getColor(d) {
+                return d == 'South America' ? 'yellow' :
+                       d == 'North America' ? 'blue' :
+                       d == 'Europe' ? 'purple' :
+                       d == 'Africa' ? 'green' :
+                       d == 'Asia' ? 'orange' :
+                       d == 'Oceania' ? 'red' :
+                       '#FFEDA0';
+            };
+
+            function style(feature) {
+                return {
+                    fillColor: getColor(feature.properties.continent),
+                    weight: 2,
+                    opacity: 1,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 0.7
+                };
+            }
+/*
+            function ciudad(d) {
+                return d == 'S' ? 'yellow' :
+                       d == 'N' ? 'green' :
+                       '#FFEDA0';
+            };
+
+            function styleC(feature) {
+                return {
+                    fillColor: ciudad(feature.properties.capital),
+                    weight: 2,
+                    opacity: 1,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 0.7                   
+                    
+                };
+            }
+            */
+         
+            var OSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
+                + 'contributors',
+                maxZoom: 18
+            });
+
+            var map = L.map('map', {
+                center: new L.LatLng(41.66, -4.72),
+                zoom: 4,
+               layers: [OSM],
+            });
+
+            L.control.scale().addTo(map);
+
+            L.geoJson(countries).addTo(map);
+            L.geoJson(ciudades).addTo(map);
+
+            L.geoJson(countries, {
+                style: style
+            }).addTo(map);
+
+            L.geoJson(ciudades, {
+                style: styleC
+            }).addTo(map);
+
+        </script>             
+    </body>
+</html>
